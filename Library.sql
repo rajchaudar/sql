@@ -12,11 +12,7 @@ Name_of_book VARCHAR(50),Status VARCHAR(50));
 CREATE TABLE Fine(roll_no INT PRIMARY KEY ,
 Date DATE,Amount INT);
 
-
-
 show tables;
-
-
 
 INSERT INTO Borrower(Rollin, Name, Date_of_issue, Name_of_book,Status)
 VALUES(18, 'Shivraj', '2024-07-10', 'CNS', "issued"),
