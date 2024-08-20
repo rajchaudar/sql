@@ -81,6 +81,3 @@ FROM student WHERE Roll_no = 56;
 SELECT Name, Marks, get_category(Marks) AS Category
 FROM student WHERE Roll_no = 30;
 
-
-
-DROP DATABASE Assignment5a;
