@@ -32,7 +32,8 @@ BEGIN
     UPDATE student
     SET Category = 'Not Categorized'
     WHERE marks < 825;
-END //
+END; 
+-- //
 
 -- DELIMITER ;
 
@@ -41,4 +42,45 @@ call categorize_students();
 
 select * from student;
 
-drop DATABASE Assignment5a;
+-- DELIMITER //
+
+CREATE FUNCTION get_category(marks INT)
+ RETURNS VARCHAR(50)
+ DETERMINISTIC
+ BEGIN
+    DECLARE category VARCHAR(50);
+    IF marks >= 990 AND marks <= 1500 THEN
+    SET category = 'Distinction';
+    ELSEIF marks >= 900 AND marks <= 989 THEN
+    SET category = 'First Class';
+    ELSEIF marks >= 825 AND marks <= 899 THEN
+    SET category = 'Higher Second Class';
+    ELSE
+    SET category = 'Not Categorised';
+    END IF;
+    RETURN category;
+ END;
+--   //
+
+-- DELIMITER ;
+
+SELECT Name, Marks, get_category(Marks) AS Category
+FROM student WHERE Roll_no = 18;
+
+SELECT Name, Marks, get_category(Marks) AS Category
+FROM student WHERE Roll_no = 63;
+
+SELECT Name, Marks, get_category(Marks) AS Category 
+FROM student WHERE Roll_no = 29;
+
+
+SELECT Name, Marks, get_category(Marks) AS Category 
+FROM student WHERE Roll_no = 56;
+
+
+SELECT Name, Marks, get_category(Marks) AS Category
+FROM student WHERE Roll_no = 30;
+
+
+
+DROP DATABASE Assignment5a;
