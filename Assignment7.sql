@@ -49,4 +49,3 @@ SELECT * FROM N_RollCall;
 SELECT * FROM O_RollCall;
 
 
-drop DATABASE  IF EXISTS A7Cur;
