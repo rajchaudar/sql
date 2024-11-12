@@ -1,6 +1,6 @@
-create database A7Cur;
+create database Cursor;
 
-use A7Cur;
+use Cursor;
 
 CREATE TABLE N_RollCall (Roll_no INT PRIMARY KEY,
 Name VARCHAR(20),Division VARCHAR(20));
@@ -39,7 +39,7 @@ BEGIN
         END LOOP;
     CLOSE cur_new_rollcall;
     COMMIT ;
-END;//
+END //
 
 DELIMITER ;
 

@@ -1,8 +1,6 @@
-Create database Assignment5a;
+Create database StorePro;
 
-
-use Assignment5a;
-
+use StorePro;
 
 Create Table student(Roll_no int Primary key,
 Name varchar(50),Marks int ,Category Varchar(50));
@@ -16,7 +14,7 @@ Values(18,"Shivraj",950),(63,"Vraj",840),(29,"Chinmay",860),
 
 select * from student;
 
--- DELIMITER //
+DELIMITER //
 
 CREATE PROCEDURE categorize_students()
 BEGIN
@@ -32,17 +30,16 @@ BEGIN
     UPDATE student
     SET Category = 'Not Categorized'
     WHERE marks < 825;
-END; 
--- //
+END //
 
--- DELIMITER ;
+DELIMITER ;
 
 call categorize_students();
 
 
 select * from student;
 
--- DELIMITER //
+DELIMITER //
 
 CREATE FUNCTION get_category(marks INT)
  RETURNS VARCHAR(50)
@@ -59,10 +56,9 @@ CREATE FUNCTION get_category(marks INT)
     SET category = 'Not Categorised';
     END IF;
     RETURN category;
- END;
---   //
+ END //
 
--- DELIMITER ;
+DELIMITER ;
 
 SELECT Name, Marks, get_category(Marks) AS Category
 FROM student WHERE Roll_no = 18;

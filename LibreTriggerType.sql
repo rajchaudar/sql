@@ -1,6 +1,6 @@
-Create Database Assignment5b;
+Create Database TRIGGER;
 
-use Assignment5b;
+use TRIGGER;
 
 Create table Library (id INT PRIMARY KEY ,
 Bookname Varchar(50),Publisher Varchar(50),
@@ -9,10 +9,10 @@ Section Varchar(50));
 INSERT INTO Library (id, bookname, publisher, section)
 VALUES(1,'TOC','Technical','Engg'),
 (2,'CNS','Techknowledge','Engg'),
-(3,'The Alchemist','HarperCollins','Fiction'),
-(4,'The Da Vinci Code','Doubleday','Thriller'),
-(5,'The Kite Runner','Riverhead','Drama'),
-(6,'The Great Gatsby','Scribner','Literature');
+(3,'DBMS','Techguru','IT'),
+(4,'SPM','Amol','ENTC'),
+(5,'SPOS','Geeta','Comp'),
+(6,'AIML','Comp','ENTC');
 
 CREATE TABLE LibraryAudit (id INT ,Pre_book_name VARCHAR(50),
 Pre_Publisher VARCHAR(50),Pre_Section VARCHAR(50),Status VARCHAR(50));
