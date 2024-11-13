@@ -1,0 +1,37 @@
+db.student.insertMany([
+  { Rollno: 1, Name: "John", Class: "TE", Div: "A", Subject: "TOC", Marks: 75, Address: "Pune" },
+  { Rollno: 2, Name: "Emma", Class: "TE", Div: "A", Subject: "DBMS", Marks: 65, Address: "Mumbai" },
+  { Rollno: 3, Name: "Aman", Class: "TE", Div: "B", Subject: "SPOS", Marks: 80, Address: "Pune" },
+  { Rollno: 4, Name: "Sara", Class: "TE", Div: "B", Subject: "DBMS", Marks: 55, Address: "Nashik" },
+  { Rollno: 5, Name: "Maya", Class: "TE", Div: "A", Subject: "TOC", Marks: 85, Address: "Pune" },
+  { Rollno: 6, Name: "Raj", Class: "TE", Div: "B", Subject: "SPOS", Marks: 90, Address: "Pune" },
+  { Rollno: 7, Name: "Sia", Class: "TE", Div: "B", Subject: "DBMS", Marks: 45, Address: "Mumbai" }
+]);
+
+db.student.aggregate([
+  { $match: { Subject: "TOC" } },
+  { $group: { _id: "$Subject", averageMarks: { $avg: "$Marks" } } }
+]);
+
+db.student.aggregate([
+  { $group: { _id: "$Div", count: { $sum: 1 } } }
+]);
+
+db.student.aggregate([
+  { $match: { Div: "B", Subject: "DBMS" } },
+  { $group: { _id: "$Div", minMarks: { $min: "$Marks" }, students: { $push: "$Name" } } }
+]);
+
+db.student.aggregate([
+  { $match: { Subject: "SPOS", Address: "Pune" } },
+  { $group: { _id: null, totalMarks: { $sum: "$Marks" } } }
+]);
+
+db.student.aggregate([
+  { $match: { Subject: "DBMS" } },
+  { $group: { _id: "$Div", count: { $sum: 1 } } }
+]);
+
+db.student.aggregate([
+  { $group: { _id: "$Address", count: { $sum: 1 } } }
+]);

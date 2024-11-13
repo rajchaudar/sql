@@ -1,0 +1,53 @@
+
+CREATE TABLE Dept (
+    DeptID INT PRIMARY KEY,       
+    DeptName VARCHAR(50) NOT NULL,
+    Location VARCHAR(50)
+);
+
+
+CREATE TABLE Emp (
+    EmpID INT PRIMARY KEY,        
+    EmpName VARCHAR(50) NOT NULL,
+    Job VARCHAR(30),
+    HireDate DATE,
+    Salary DECIMAL(10, 2),
+    DeptID INT,                   
+    CONSTRAINT fk_dept FOREIGN KEY (DeptID) REFERENCES Dept(DeptID)
+);
+
+
+
+CREATE VIEW ManagerView AS
+SELECT EmpID, EmpName, Job, Salary
+FROM Emp
+WHERE Job = 'Manager';
+
+
+CREATE VIEW EmpDeptView AS
+SELECT e.EmpID, e.EmpName, e.Job, e.Salary, d.DeptName, d.Location
+FROM Emp e
+JOIN Dept d ON e.DeptID = d.DeptID
+WHERE d.Location = 'New York';
+
+-- Inserting into the ManagerView (if supported by the database)
+INSERT INTO ManagerView (EmpID, EmpName, Job, Salary)
+VALUES (101, 'Alice', 'Manager', 75000);
+
+-- Updating records in ManagerView
+UPDATE ManagerView
+SET Salary = 80000
+WHERE EmpName = 'Alice';
+
+-- Deleting records from ManagerView
+DELETE FROM ManagerView
+WHERE EmpName = 'Alice';
+
+
+-- Creating an index on DeptID and EmpID in ascending order
+CREATE INDEX EmployeeId ON Emp (DeptID ASC, EmpID ASC);
+
+-- Deleting the EmployeeId index
+DROP INDEX EmployeeId;
+
+

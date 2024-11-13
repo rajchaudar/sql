@@ -1,0 +1,93 @@
+CREATE DATABASE propertydealers;
+USE propertydealers;
+
+-- Create Branch table
+CREATE TABLE Branch (
+    branchNo INT PRIMARY KEY,
+    street VARCHAR(50),
+    city VARCHAR(50),
+    postcode VARCHAR(10)
+);
+
+-- Create Staff table with foreign key referencing Branch
+CREATE TABLE Staff (
+    staffNo INT PRIMARY KEY,
+    fname VARCHAR(50),
+    lname VARCHAR(50),
+    position VARCHAR(50),
+    sex CHAR(1),
+    DOB DATE,
+    salary DECIMAL(10, 2),
+    branchNo INT,
+    FOREIGN KEY (branchNo) REFERENCES Branch(branchNo)
+);
+
+-- Create PropertyForRent table with foreign keys referencing Staff and Branch
+CREATE TABLE PropertyForRent (
+    propertyNo INT PRIMARY KEY,
+    street VARCHAR(50),
+    city VARCHAR(50),
+    postcode VARCHAR(10),
+    type VARCHAR(20),
+    rooms INT,
+    rent DECIMAL(10, 2),
+    staffNo INT,
+    branchNo INT,
+    FOREIGN KEY (staffNo) REFERENCES Staff(staffNo),
+    FOREIGN KEY (branchNo) REFERENCES Branch(branchNo)
+);
+
+-- Insert data into Branch table
+INSERT INTO Branch (branchNo, street, city, postcode) VALUES
+(1001, 'MG Road', 'Pune', '411001'),
+(1002, 'FC Road', 'Pune', '411002'),
+(1003, 'LBS Road', 'Mumbai', '400001');
+
+-- Insert data into Staff table
+INSERT INTO Staff (staffNo, fname, lname, position, sex, DOB, salary, branchNo) VALUES
+(2001, 'John', 'Doe', 'Manager', 'M', '1980-05-15', 70000, 1001),
+(2002, 'Jane', 'Smith', 'Saleswoman', 'F', '1995-08-21', 50000, 1002),
+(2003, 'Bob', 'Brown', 'Salesman', 'M', '1990-03-12', 45000, 1001),
+(2004, 'Alice', 'White', 'Salesman', 'F', '2002-11-02', 40000, 1003);
+
+-- Insert data into PropertyForRent table
+INSERT INTO PropertyForRent (propertyNo, street, city, postcode, type, rooms, rent, staffNo, branchNo) VALUES
+(3001, 'MG Road', 'Pune', '411001', 'Apartment', 3, 25000, 2001, 1001),
+(3002, 'FC Road', 'Pune', '411002', 'Flat', 2, 20000, 2002, 1002),
+(3003, 'LBS Road', 'Mumbai', '400001', 'Flat', 1, 15000, 2004, 1003),
+(3004, 'MG Road', 'Pune', '411001', 'House', 4, 30000, 2001, 1001);
+
+
+UPDATE Branch
+SET street = 'MG'
+WHERE branchNo = 1001;
+
+
+SELECT fname, lname
+FROM Staff
+WHERE salary > (SELECT AVG(salary) FROM Staff);
+
+
+SELECT type, rooms
+FROM PropertyForRent
+WHERE city = 'Pune';
+
+
+SELECT fname, lname
+FROM Staff
+WHERE position IN ('Salesman', 'Saleswoman');
+
+
+SELECT COUNT(*) AS NumberOfFlats
+FROM PropertyForRent
+WHERE type = 'Flat';
+
+
+SELECT fname, lname, DOB
+FROM Staff
+WHERE DOB < '2004-01-01';
+
+
+SELECT branchNo, COUNT(*) AS NumberOfStaff
+FROM Staff
+GROUP BY branchNo;

@@ -1,0 +1,89 @@
+-- Creating the Orders table
+CREATE TABLE Orders (
+    Order_no INT PRIMARY KEY,
+    cust INT,
+    product VARCHAR(50),
+    Quantity INT,
+    amount DECIMAL(10, 2),
+    Disc DECIMAL(5, 2),
+    FOREIGN KEY (cust) REFERENCES Customers(Cust_No)
+);
+
+-- Creating the Customers table
+CREATE TABLE Customers (
+    Cust_No INT PRIMARY KEY,
+    Company VARCHAR(50),
+    Cust_Rep INT,
+    Credit_Limit DECIMAL(10, 2),
+    FOREIGN KEY (Cust_Rep) REFERENCES Sales_Representative(Rep_no)
+);
+
+-- Creating the Sales_Representative table
+CREATE TABLE Sales_Representative (
+    Rep_no INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Re_office VARCHAR(50),
+    Quota DECIMAL(10, 2),
+    sales DECIMAL(10, 2)
+);
+
+
+-- Insert data into Sales_Representative table
+INSERT INTO Sales_Representative (Rep_no, Name, Re_office, Quota, sales) VALUES
+(1, 'John Doe', 'Office1', 10000.00, 5000.00),
+(2, 'Jane Smith', 'Office2', 15000.00, 8000.00),
+(3, 'Samuel Green', 'Office1', 12000.00, 6000.00);
+
+-- Insert data into Customers table
+INSERT INTO Customers (Cust_No, Company, Cust_Rep, Credit_Limit) VALUES
+(101, 'TCS', 1, 25000.00),
+(102, 'Infosys', 2, 30000.00),
+(103, 'Wipro', 3, 35000.00);
+
+-- Insert data into Orders table
+INSERT INTO Orders (Order_no, cust, product, Quantity, amount, Disc) VALUES
+(201, 101, 'Laptop', 5, 30000.00, 10),
+(202, 102, 'Monitor', 10, 15000.00, 5),
+(203, 103, 'Keyboard', 15, 5000.00, 20),
+(204, 101, 'Printer', 3, 9000.00, 15);
+
+
+SELECT c.Company AS Customer_Name, 
+       s.Name AS Rep_Name, 
+       s.Re_office AS Rep_Office
+FROM Customers c
+JOIN Sales_Representative s ON c.Cust_Rep = s.Rep_no;
+
+
+SELECT o.Order_no, o.amount, c.Company AS Customer_Name, 
+       s.Name AS Salesperson_Name
+FROM Orders o
+JOIN Customers c ON o.cust = c.Cust_No
+JOIN Sales_Representative s ON c.Cust_Rep = s.Rep_no
+WHERE o.amount > 25000;
+
+
+SELECT DISTINCT o.product
+FROM Orders o
+JOIN Customers c ON o.cust = c.Cust_No
+WHERE c.Company = 'TCS';
+
+SELECT c.Company, MAX(o.Disc) AS Max_Discount
+FROM Orders o
+JOIN Customers c ON o.cust = c.Cust_No
+GROUP BY c.Company
+ORDER BY Max_Discount DESC
+LIMIT 1;
+
+
+SELECT s1.Name AS Rep1, s2.Name AS Rep2, s1.Re_office
+FROM Sales_Representative s1
+JOIN Sales_Representative s2 ON s1.Re_office = s2.Re_office
+WHERE s1.Rep_no != s2.Rep_no;
+
+SELECT c.Company, c.Credit_Limit, SUM(o.Disc) AS Total_Discount
+FROM Customers c
+JOIN Orders o ON c.Cust_No = o.cust
+GROUP BY c.Company;
+
+

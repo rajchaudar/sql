@@ -1,0 +1,22 @@
+DELIMITER //
+
+CREATE PROCEDURE proc_grade (IN stud_marks INT, OUT grade_category VARCHAR(50))
+BEGIN
+    IF stud_marks >= 990 AND stud_marks <= 1500 THEN
+        SET grade_category = 'Distinction';
+    ELSEIF stud_marks >= 900 AND stud_marks <= 989 THEN
+        SET grade_category = 'First Class';
+    ELSEIF stud_marks >= 825 AND stud_marks <= 899 THEN
+        SET grade_category = 'Higher Second Class';
+    ELSE
+        SET grade_category = 'Below Qualification';
+    END IF;
+END //
+
+DELIMITER ;
+
+SET @output_category = '';  -- Initialize the variable
+
+CALL proc_grade(950, @output_category);  -- Call the procedure with input 950
+
+SELECT @output_category AS GradeCategory;  -- Retrieve the output

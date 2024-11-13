@@ -1,0 +1,44 @@
+
+db.student.insertMany([
+    { first_name: "Bhakti", last_name: "Patil", gender: "female", age: 20, class: "TE A", grd_point: 35, city: "Pune", course: "BCA" },
+    { first_name: "Raj", last_name: "Jadhav", gender: "male", age: 18, class: "TE B", grd_point: 28, city: "Mumbai", course: "BBA" },
+    { first_name: "Aryan", last_name: "Sharma", gender: "male", age: 21, class: "TE A", grd_point: 31, city: "Bangalore", course: "BCA" },
+    { first_name: "Nidhi", last_name: "Desai", gender: "female", age: 19, class: "TE C", grd_point: 29, city: "Chennai", course: "BSc" },
+    { first_name: "Rahul", last_name: "Kumar", gender: "male", age: 22, class: "SE A", grd_point: 34, city: "Delhi", course: "BCom" },
+    { first_name: "Priya", last_name: "Singh", gender: "female", age: 17, class: "TE A", grd_point: 32, city: "Bangalore", course: "BA" },
+    { first_name: "Amit", last_name: "Joshi", gender: "male", age: 19, class: "TE B", grd_point: 30, city: "Pune", course: "BSc" },
+    { first_name: "Sneha", last_name: "Verma", gender: "female", age: 18, class: "TE A", grd_point: 36, city: "Mumbai", course: "BCA" },
+    { first_name: "Vikas", last_name: "Nair", gender: "male", age: 18, class: "TE B", grd_point: 26, city: "Hyderabad", course: "BBA" },
+    { first_name: "Sara", last_name: "Khan", gender: "female", age: 20, class: "TE C", grd_point: 38, city: "Bangalore", course: "BSc" }
+]);
+
+db.student.find({
+    $or: [
+        { gender: "male" },
+        { class: "TE A" },
+        { grd_point: { $gte: 31 } }
+    ]
+});
+
+db.student.find({ city: "Bangalore", age: { $lte: 19 } });
+
+db.student.updateOne(
+    { first_name: "Bhakti" },
+    { $set: { course: "MCA" } }
+);
+
+db.student.deleteOne({ age: 18, gender: "male" });
+
+db.student.deleteOne({ last_name: "Jadhav", class: "TE B" });
+
+db.student.find({
+    $nor: [
+        { age: { $gt: 20 } },
+        { grd_point: { $lt: 30 } }
+    ]
+});
+
+db.student.updateOne(
+    { first_name: "Aryan" },
+    { $set: { grd_point: 40 } }
+);

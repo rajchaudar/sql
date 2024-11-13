@@ -1,0 +1,51 @@
+use SITS
+
+// Insert sample data into Teachers collection
+db.Teachers.insertMany([
+  { Tname: "John", dno: 1, dname: "Mathematics", experience: 5, salary: 60000, date_of_joining: new Date("2018-01-01") },
+  { Tname: "Alice", dno: 1, dname: "Mathematics", experience: 3, salary: 50000, date_of_joining: new Date("2019-03-15") },
+  { Tname: "Bob", dno: 2, dname: "Physics", experience: 10, salary: 70000, date_of_joining: new Date("2015-06-20") },
+  { Tname: "Eva", dno: 2, dname: "Physics", experience: 8, salary: 65000, date_of_joining: new Date("2016-08-25") },
+  { Tname: "David", dno: 3, dname: "Chemistry", experience: 2, salary: 40000, date_of_joining: new Date("2021-07-10") }
+]);
+
+// Insert sample data into Students collection
+db.Students.insertMany([
+  { Sname: "Alice", roll_no: 101, class: "10A" },
+  { Sname: "Bob", roll_no: 102, class: "10B" },
+  { Sname: "Charlie", roll_no: 103, class: "10A" },
+  { Sname: "David", roll_no: 104, class: "10C" },
+  { Sname: "Eva", roll_no: 105, class: "10B" }
+]);
+
+db.Teachers.aggregate([
+  { $group: { _id: "$dname", avgSalary: { $avg: "$salary" } } }
+]);
+
+db.Teachers.aggregate([
+  { $group: { _id: "$dname", count: { $sum: 1 } } }
+]);
+
+db.Teachers.aggregate([
+  { $group: { _id: "$dname", totalSalary: { $sum: "$salary" } } },
+  { $match: { totalSalary: { $gte: 50000 } } }
+]);
+
+db.Teachers.aggregate([
+  { $group: { _id: "$dname", maxSalary: { $max: "$salary" } } }
+]);
+
+db.Teachers.aggregate([
+  { $group: { _id: "$dname", minSalary: { $min: "$salary" } } }
+]);
+
+db.Teachers.aggregate([
+  { $group: { _id: "$dname", maxExperience: { $max: "$experience" } } }
+]);
+
+db.Students.createIndex({ roll_no: 1 }, { unique: true });
+
+db.Teachers.createIndex({ dno: 1, salary: -1 });
+
+db.getCollection("Teachers").getIndexes();
+db.getCollection("Students").getIndexes();

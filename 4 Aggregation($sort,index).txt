@@ -1,0 +1,32 @@
+db.student.insertMany([
+  { Rollno: 1, Name: "Alice", Class: "TE", Div: "A", Subject: "DS", Marks: 85, Address: "Pune" },
+  { Rollno: 2, Name: "Bob", Class: "TE", Div: "B", Subject: "DS", Marks: 75, Address: "Mumbai" },
+  { Rollno: 3, Name: "Charlie", Class: "TE", Div: "A", Subject: "DS", Marks: 95, Address: "Pune" },
+  { Rollno: 4, Name: "Daisy", Class: "SE", Div: "B", Subject: "DS", Marks: 65, Address: "Pune" },
+  { Rollno: 5, Name: "Eve", Class: "TE", Div: "A", Subject: "DBMS", Marks: 80, Address: "Pune" },
+  { Rollno: 6, Name: "Frank", Class: "SE", Div: "A", Subject: "DBMS", Marks: 70, Address: "Mumbai" }
+]);
+
+db.student.aggregate([
+  { $match: { Subject: "DS" } },  // Filter for DS subject
+  { $group: { _id: "$Address", maxMarks: { $max: "$Marks" } } }  // Group by Address and find max Marks
+]);
+
+db.student.aggregate([
+  { $group: { _id: null, avgMarks: { $avg: "$Marks" } } }  // Calculate average of Marks field
+]);
+
+db.student.aggregate([
+  { $group: { _id: "$Div", students: { $push: "$Name" } } }  // Group by Div and collect Names in an array
+]);
+
+db.student.createIndex({ Name: 1 });  // 1 for ascending order index
+db.student.createIndex({ Name: 1, Class: 1 });
+
+db.student.dropIndex("Name_1");  // "Name_1" is the default name given to the index { Name: 1 }
+
+db.student.aggregate([
+  { $match: { Div: "A" } },  // Filter to include only Division A students
+  { $group: { _id: "$Subject", topMarks: { $max: "$Marks" }, topStudents: { $push: "$Name" } } },  // Group by Subject, find max Marks, and collect Names
+  { $sort: { topMarks: -1 } }  // Sort in descending order of topMarks
+]);

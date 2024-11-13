@@ -1,0 +1,53 @@
+CREATE TABLE Library (
+    BookID INT PRIMARY KEY,
+    Title VARCHAR(255),
+    Author VARCHAR(255),
+    PublishedYear INT,
+    Quantity INT
+);
+
+
+CREATE TABLE Library_Audit (
+    AuditID INT AUTO_INCREMENT PRIMARY KEY,
+    BookID INT,
+    Title VARCHAR(255),
+    Author VARCHAR(255),
+    PublishedYear INT,
+    Quantity INT,
+    Operation VARCHAR(10), -- 'UPDATE' or 'DELETE'
+    Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TRIGGER Before_Update_Library
+BEFORE UPDATE ON Library
+FOR EACH ROW
+BEGIN
+    INSERT INTO Library_Audit (BookID, Title, Author, PublishedYear, Quantity, Operation)
+    VALUES (OLD.BookID, OLD.Title, OLD.Author, OLD.PublishedYear, OLD.Quantity, 'UPDATE');
+END;
+
+
+CREATE TRIGGER After_Delete_Library
+AFTER DELETE ON Library
+FOR EACH ROW
+BEGIN
+    INSERT INTO Library_Audit (BookID, Title, Author, PublishedYear, Quantity, Operation)
+    VALUES (OLD.BookID, OLD.Title, OLD.Author, OLD.PublishedYear, OLD.Quantity, 'DELETE');
+END;
+
+
+-- Insert sample data into Library
+INSERT INTO Library (BookID, Title, Author, PublishedYear, Quantity) 
+VALUES (1, 'SQL Fundamentals', 'John Doe', 2021, 5);
+
+-- Update an existing record
+UPDATE Library 
+SET Quantity = 10 
+WHERE BookID = 1;
+
+-- Delete a record
+DELETE FROM Library 
+WHERE BookID = 1;
+
+

@@ -1,0 +1,28 @@
+db.City.insertMany([
+  { cityname: "Pune", area: 450, population: 1200000 },
+  { cityname: "Mumbai", area: 600, population: 20000000 },
+  { cityname: "Nashik", area: 300, population: 700000 },
+  { cityname: "Nagpur", area: 400, population: 900000 },
+  { cityname: "Aurangabad", area: 250, population: 1100000 },
+  { cityname: "Kolhapur", area: 200, population: 500000 }
+]);
+
+
+const mapFunction = function() {
+  if (this.population > 1000000) {
+    emit("HIGHLY POPULATED", 1);  // For cities with population > 10 lakhs
+  } else {
+    emit("LOW POPULATED", 1);      // For cities with population <= 10 lakhs
+  }
+};
+
+const reduceFunction = function(key, values) {
+  return Array.sum(values);
+};
+
+// Run the MapReduce function
+db.City.mapReduce(
+  mapFunction,
+  reduceFunction,
+  { out: "CityPopulationCategories" }
+);

@@ -1,0 +1,100 @@
+-- Creating the Employee table
+CREATE TABLE Employee (
+    EmpID INT PRIMARY KEY,
+    Ename VARCHAR(50),
+    Salary DECIMAL(10, 2),
+    Contactno VARCHAR(15),
+    City VARCHAR(50),
+    DeptID INT,
+    FOREIGN KEY (DeptID) REFERENCES Department(DeptID)
+);
+
+-- Creating the Department table
+CREATE TABLE Department (
+    DeptID INT PRIMARY KEY,
+    Dname VARCHAR(50),
+    Location VARCHAR(50)
+);
+
+
+-- Inserting data into Department table
+INSERT INTO Department (DeptID, Dname, Location) VALUES
+(1, 'HR', 'New York'),
+(2, 'Finance', 'London'),
+(3, 'IT', 'San Francisco'),
+(4, 'Marketing', 'Chicago');
+
+-- Inserting data into Employee table
+INSERT INTO Employee (EmpID, Ename, Salary, Contactno, City, DeptID) VALUES
+(101, 'Alice', 50000, '1234567890', 'New York', 1),
+(102, 'Bob', 60000, '2345678901', 'London', 2),
+(103, 'Charlie', 55000, '3456789012', 'San Francisco', 3),
+(104, 'David', 45000, '4567890123', 'Chicago', 4),
+(105, 'Eve', 70000, '5678901234', 'New York', 1);
+
+SELECT E.Ename, D.Dname
+FROM Employee E
+JOIN Department D ON E.DeptID = D.DeptID;
+
+-- Using INNER JOIN
+SELECT E.Ename, D.Dname, D.Location
+FROM Employee E
+INNER JOIN Department D ON E.DeptID = D.DeptID;
+
+-- Using NATURAL JOIN (assuming column names match, like DeptID)
+SELECT E.Ename, D.Dname, D.Location
+FROM Employee E
+NATURAL JOIN Department D;
+
+SELECT E.Ename, D.Location, D.Dname
+FROM Employee E
+JOIN Department D ON E.DeptID = D.DeptID
+WHERE E.DeptID = D.DeptID;
+
+
+SELECT D.Dname, E.Salary, D.Location, E.Dname AS Employee_Department
+FROM Department D
+RIGHT JOIN Employee E ON D.DeptID = E.DeptID;
+
+
+-- Note: MySQL does not support FULL OUTER JOIN directly.
+-- You can simulate it by combining LEFT JOIN and RIGHT JOIN
+
+SELECT E.Ename, D.Dname, D.Location
+FROM Employee E
+LEFT JOIN Department D ON E.DeptID = D.DeptID
+UNION
+SELECT E.Ename, D.Dname, D.Location
+FROM Employee E
+RIGHT JOIN Department D ON E.DeptID = D.DeptID;
+
+
+SELECT E.Ename, D.Dname
+FROM Employee E
+CROSS JOIN Department D;
+
+
+SELECT E1.Ename AS Employee1, E2.Ename AS Employee2, E1.DeptID
+FROM Employee E1
+JOIN Employee E2 ON E1.DeptID = E2.DeptID
+WHERE E1.EmpID != E2.EmpID;
+
+CREATE VIEW Employee_View AS
+SELECT E.Ename, E.Salary, D.Dname
+FROM Employee E
+JOIN Department D ON E.DeptID = D.DeptID;
+
+CREATE VIEW Department_Salary_View AS
+SELECT D.Dname, AVG(E.Salary) AS Average_Salary
+FROM Employee E
+JOIN Department D ON E.DeptID = D.DeptID
+GROUP BY D.Dname
+HAVING AVG(E.Salary) > 50000;
+
+-- You can update a simple view if it is updatable (based on underlying tables)
+UPDATE Employee_View
+SET Salary = 75000
+WHERE Ename = 'Alice';
+
+DROP VIEW IF EXISTS Employee_View;
+DROP VIEW IF EXISTS Department_Salary_View;

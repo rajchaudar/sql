@@ -1,0 +1,41 @@
+
+db.student.insertMany([
+    { first_name: "Bhakti", last_name: "Patil", gender: "female", age: 20, class: "TE A", grd_point: 35, city: "Pune", state: "MH", course: "BCA" },
+    { first_name: "Raj", last_name: "Jadhav", gender: "male", age: 18, class: "TE B", grd_point: 28, city: "Mumbai", state: "MH", course: "BBA" },
+    { first_name: "Aryan", last_name: "Sharma", gender: "male", age: 21, class: "TE A", grd_point: 31, city: "Bangalore", state: "KA", course: "BCA" },
+    { first_name: "Nidhi", last_name: "Desai", gender: "female", age: 19, class: "TE C", grd_point: 29, city: "Chennai", state: "TN", course: "BSc" },
+    { first_name: "Riyansh", last_name: "Kulkarni", gender: "male", age: 19, class: "TE B", grd_point: 34, city: "Nagpur", state: "MH", course: "BCom" },
+    { first_name: "Evanshika", last_name: "Verma", gender: "female", age: 17, class: "TE A", grd_point: 32, city: "Bangalore", state: "KA", course: "BA" },
+    { first_name: "Priya", last_name: "Soniminde", gender: "female", age: 20, class: "TE B", grd_point: 36, city: "Mumbai", state: "MH", course: "BCA" },
+    { first_name: "Amit", last_name: "Joshi", gender: "male", age: 19, class: "TE B", grd_point: 30, city: "Pune", state: "MH", course: "BSc" },
+    { first_name: "Sneha", last_name: "Deshmukh", gender: "female", age: 18, class: "TE A", grd_point: 38, city: "Hyderabad", state: "TS", course: "BBA" },
+    { first_name: "Vikas", last_name: "Nair", gender: "male", age: 18, class: "TE C", grd_point: 26, city: "Hyderabad", state: "KA", course: "BBA" }
+]);
+
+db.student.find({
+    $and: [
+        { $or: [{ gender: "female" }, { class: "TE B" }] },
+        { grd_point: { $gte: 31 } }
+    ]
+});
+
+db.student.updateOne(
+    { first_name: "Riyansh" },
+    { $set: { age: 20 } }
+);
+
+db.student.updateOne(
+    { last_name: "Soniminde" },
+    { $set: { city: "Nagpur", state: "MH" } }
+);
+
+db.student.deleteMany({ state: "KA" });
+
+db.student.deleteOne({ first_name: "Evanshika", age: { $lt: 18 } });
+
+db.student.find({
+    $nor: [
+        { age: { $lt: 19 } },
+        { grd_point: { $gte: 30 } }
+    ]
+});

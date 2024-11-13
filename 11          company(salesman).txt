@@ -1,0 +1,66 @@
+-- Create the database
+CREATE DATABASE company;
+USE company;
+
+-- Create Dept table
+CREATE TABLE dept (
+    deptno INT PRIMARY KEY,
+    deptname VARCHAR(50),
+    location VARCHAR(50)
+);
+
+-- Create Emp table
+CREATE TABLE Emp (
+    eno INT PRIMARY KEY,
+    ename VARCHAR(50),
+    job VARCHAR(50),
+    hiredate DATE,
+    salary DECIMAL(10, 2),
+    commission DECIMAL(10, 2),
+    deptno INT,
+    FOREIGN KEY (deptno) REFERENCES dept(deptno)
+);
+
+
+SELECT MAX(salary) AS Max_Salary
+FROM Emp
+WHERE job = 'Salesman';
+
+SELECT *
+FROM Emp
+WHERE ename LIKE 'I%';
+
+SELECT *
+FROM Emp
+WHERE hiredate < '1981-09-30';
+
+SELECT *
+FROM Emp
+ORDER BY salary DESC;
+
+SELECT COUNT(*) AS Employee_Count, AVG(salary) AS Avg_Salary
+FROM Emp
+WHERE deptno = 20;
+
+SELECT hiredate, AVG(salary) AS Avg_Salary, MIN(salary) AS Min_Salary
+FROM Emp
+WHERE deptno = 10
+GROUP BY hiredate;
+
+SELECT e.ename, d.deptname
+FROM Emp e
+JOIN dept d ON e.deptno = d.deptno;
+
+SELECT d.deptname, SUM(e.salary) AS Total_Salary
+FROM Emp e
+JOIN dept d ON e.deptno = d.deptno
+GROUP BY d.deptname;
+
+SELECT e.*
+FROM Emp e
+JOIN dept d ON e.deptno = d.deptno
+WHERE d.deptname = 'Dev';
+
+UPDATE Emp
+SET salary = salary * 1.05
+WHERE deptno = 10;

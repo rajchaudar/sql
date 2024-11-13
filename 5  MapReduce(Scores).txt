@@ -1,0 +1,31 @@
+db.students.insertMany([
+  { Rollno: 1, Name: "Alice", Subject: "DBMS", Marks: 85, Address: "Pune" },
+  { Rollno: 2, Name: "Bob", Subject: "DBMS", Marks: 65, Address: "Mumbai" },
+  { Rollno: 3, Name: "Charlie", Subject: "DBMS", Marks: 45, Address: "Pune" },
+  { Rollno: 4, Name: "Daisy", Subject: "DBMS", Marks: 35, Address: "Pune" },
+  { Rollno: 5, Name: "Eve", Subject: "DBMS", Marks: 72, Address: "Mumbai" },
+  { Rollno: 6, Name: "Frank", Subject: "DBMS", Marks: 25, Address: "Pune" }
+]);
+
+const mapFunction = function() {
+  if (this.Subject === "DBMS") {
+    if (this.Marks > 70) {
+      emit("Highscores", 1);
+    } else if (this.Marks > 40 && this.Marks <= 70) {
+      emit("Average scores", 1);
+    } else {
+      emit("Failed", 1);
+    }
+  }
+};
+
+const reduceFunction = function(key, values) {
+  return Array.sum(values);
+};
+
+// Run the mapReduce function
+db.students.mapReduce(
+  mapFunction,
+  reduceFunction,
+  { out: { inline: 1 } }
+);

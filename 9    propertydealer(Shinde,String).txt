@@ -1,0 +1,109 @@
+CREATE DATABASE propertydealers;
+USE propertydealers;
+
+CREATE TABLE Branch (
+    branchno INT PRIMARY KEY,
+    street VARCHAR(50),
+    city VARCHAR(50),
+    postcode INT
+);
+
+CREATE TABLE Staff (
+    staffno INT PRIMARY KEY,
+    fname VARCHAR(50),
+    lname VARCHAR(50),
+    position VARCHAR(50),
+    sex CHAR(1),
+    DOB DATE,
+    salary DECIMAL(10,2),
+    branchno INT,
+    FOREIGN KEY (branchno) REFERENCES Branch(branchno)
+);
+
+CREATE TABLE PropertyForRent (
+    propertyNo INT PRIMARY KEY,
+    street VARCHAR(50),
+    city VARCHAR(50),
+    postcode INT,
+    Type VARCHAR(50),
+    rooms INT,
+    rent DECIMAL(10,2),
+    ownerno INT,
+    staffno INT,
+    branchno INT,
+    FOREIGN KEY (staffno) REFERENCES Staff(staffno),
+    FOREIGN KEY (branchno) REFERENCES Branch(branchno)
+);
+
+CREATE TABLE Client (
+    CUID INT PRIMARY KEY,
+    fName VARCHAR(50),
+    lName VARCHAR(50),
+    Rent DECIMAL(10,2)
+);
+
+CREATE TABLE PrivateOwner (
+    OUID INT PRIMARY KEY,
+    fName VARCHAR(50),
+    lName VARCHAR(50),
+    address VARCHAR(100)
+);
+
+-- Insert Data (Replace with your actual data)
+INSERT INTO Branch VALUES 
+(1, 'Main St', 'CityA', '411001'),
+(2, 'Broadway', 'CityB', '411041');
+
+INSERT INTO Staff VALUES 
+(101, 'Amit', 'Kumar', 'Manager', 'M', '1980-05-15', 60000, 1),
+(102, 'Sita', 'Patel', 'Agent', 'F', '1990-08-20', 50000, 1),
+(103, 'Rahul', 'Sharma', 'Agent', 'M', '1985-09-25', 55000, 2),
+(106, 'Priya', 'Singh', 'Clerk', 'F', '1992-02-10', 35000, 2);
+
+INSERT INTO PropertyForRent VALUES 
+(1, 'Rose St', 'CityA', '411001', 'Apartment', 2, 1200, 201, 101, 1),
+(2, 'Park St', 'CityB', '411041', 'Villa', 4, 2500, 202, 102, 2);
+
+INSERT INTO Client VALUES 
+(301, 'Arun', 'Mehta', 1200),
+(302, 'Kiran', 'Verma', 2500);
+
+INSERT INTO PrivateOwner VALUES 
+(201, 'Arun', 'Mehta', 'Rose St, CityA'),
+(202, 'Nita', 'Shah', 'Park St, CityB');
+
+-- Update lname of staff with staffno 106
+UPDATE Staff
+SET lname = 'Shinde'
+WHERE staffno = 106;
+
+-- Delete branch with postcode 411041
+DELETE FROM Branch
+WHERE postcode = 411041;
+
+-- List employees with at least 2 A's in their name
+SELECT *
+FROM Staff
+WHERE fname LIKE '%A%A%' OR lname LIKE '%A%A%';
+
+-- List maximum salary from each branch, highest to lowest
+SELECT branchno, MAX(salary) AS max_salary
+FROM Staff
+GROUP BY branchno
+ORDER BY max_salary DESC;
+
+-- Find clients who are also owners (Assuming a join condition based on names)
+SELECT C.*
+FROM Client C
+JOIN PrivateOwner P ON C.fName = P.fName AND C.lName = P.lName;
+
+-- Find owners who are not clients (Assuming a similar join condition)
+SELECT P.*
+FROM PrivateOwner P
+LEFT JOIN Client C ON P.fName = C.fName AND P.lName = C.lName
+WHERE C.CUID IS NULL;
+
+-- Find owners with 'C' as the third alphabet in their name
+SELECT *
+FROM PrivateOwner
+WHERE fName LIKE '__C%' OR lName LIKE '__C%';
